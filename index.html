@@ -118,10 +118,12 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    justify-content: center;
   }
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab {
     flex: 1;
+    max-width: 140px;
     min-width: 80px;
     padding: 12px 8px 10px;
     text-align: center;
@@ -137,6 +139,15 @@
   .nav-tab .tab-icon { font-size: 18px; display: block; margin-bottom: 3px; }
   .nav-tab.active { color: var(--green); border-bottom-color: var(--green); }
 
+  @media (max-width: 500px) {
+    .nav-tabs {
+      justify-content: flex-start;
+    }
+    .nav-tab {
+      max-width: none;
+    }
+  }
+
   /* PAGES */
   .page { display: none; }
   .page.active { display: block; }
@@ -146,6 +157,42 @@
     max-width: 500px;
     margin: 0 auto;
     padding: 16px 16px 0;
+    transition: max-width 0.3s ease;
+  }
+
+  @media (min-width: 992px) {
+    .container {
+      max-width: 1100px;
+      padding: 24px 24px 0;
+    }
+  }
+
+  /* DESKTOP LAYOUT GRIDS */
+  .desktop-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  @media (min-width: 992px) {
+    .desktop-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .grid-left {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .grid-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: sticky;
+      top: 24px;
+    }
   }
 
   /* CARD */
@@ -394,6 +441,13 @@
 
   /* ===================== STATS ===================== */
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  @media (min-width: 992px) {
+    .stats-grid {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+  }
   .stat-card {
     background: var(--card2); border-radius: 14px; padding: 16px;
     text-align: center; border: 1px solid var(--border);
@@ -507,6 +561,217 @@
   .stars-row .star:hover {
     transform: scale(1.2);
   }
+
+  /* ===================== CALENDRIER DE TRADING ===================== */
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .calendar-title-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  .calendar-month-year {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .calendar-nav {
+    display: flex;
+    gap: 8px;
+  }
+  .calendar-nav-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .calendar-nav-btn:hover {
+    background: var(--border);
+    border-color: var(--green);
+    color: var(--green);
+    transform: scale(1.05);
+  }
+  .calendar-nav-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .calendar-weekdays-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .weekday-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .calendar-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+  
+  .day-cell {
+    position: relative;
+    aspect-ratio: 1;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+  .day-cell:hover {
+    border-color: var(--green);
+    background: var(--border);
+    transform: translateY(-2px);
+  }
+  .day-cell.empty {
+    background: transparent;
+    border-color: transparent;
+    cursor: default;
+    pointer-events: none;
+  }
+  .day-cell.today {
+    border-color: var(--blue);
+  }
+  .day-cell.selected {
+    background: var(--green) !important;
+    border-color: var(--green) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  }
+  .day-cell.selected .day-number {
+    color: #fff !important;
+  }
+  .day-cell.selected .day-pnl {
+    color: #fff !important;
+  }
+
+  .day-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .day-cell.today .day-number {
+    color: var(--blue);
+    background: rgba(59, 130, 246, 0.15);
+    border-radius: 6px;
+    padding: 2px 6px;
+    margin-top: -4px;
+  }
+  body.light-theme .day-cell.today .day-number {
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  .day-pnl {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 4px;
+    border-radius: 4px;
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .day-pnl.win { color: var(--green); }
+  .day-pnl.loss { color: var(--red); }
+  .day-pnl.be { color: var(--blue); }
+  body.light-theme .day-pnl.win { color: var(--green-dark); }
+
+  /* Performance cell backgrounds */
+  .day-cell.perf-win {
+    background: rgba(34, 197, 94, 0.08);
+    border-color: rgba(34, 197, 94, 0.25);
+  }
+  .day-cell.perf-win:hover {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: var(--green);
+  }
+  .day-cell.perf-loss {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.25);
+  }
+  .day-cell.perf-loss:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: var(--red);
+  }
+  .day-cell.perf-be {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.25);
+  }
+  .day-cell.perf-be:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: var(--blue);
+  }
+
+  /* DAILY STATS SUMMARY */
+  .daily-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .daily-stat-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+  .daily-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .daily-stat-val.green { color: var(--green); }
+  .daily-stat-val.red { color: var(--red); }
+  .daily-stat-val.blue { color: var(--blue); }
+  body.light-theme .daily-stat-val.green { color: var(--green-dark); }
+  
+  .daily-stat-lbl {
+    font-size: 9px;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+  
+  .events-card-header {
+    margin-bottom: 16px;
+  }
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 </style>
 </head>
 <body>
@@ -533,13 +798,17 @@
   <div class="nav-tab" onclick="switchTab('stats')">
     <span class="tab-icon">📈</span>Stats
   </div>
+  <div class="nav-tab" onclick="switchTab('calendrier')">
+    <span class="tab-icon">📅</span>Calendrier
+  </div>
 </div>
 
 <!-- ===================== PAGE VALIDATEUR ===================== -->
 <div id="page-validateur" class="page active">
 <div class="container">
-
-  <div id="step-confirmations" class="card">
+  <div class="desktop-grid">
+    <div class="grid-left">
+      <div id="step-confirmations" class="card">
     <div class="card-title" onclick="toggleCard(this)">
       Confirmations et indicateurs
       <span class="chevron">▼</span>
@@ -605,20 +874,24 @@
     
     <button class="btn-back" onclick="resetToValidation()">← Revenir à la validation</button>
   </div>
+    </div> <!-- end .grid-left -->
 
-  <!-- HISTORIQUE DES VALIDATIONS -->
-  <div id="validation-history-card" class="card">
-    <div class="card-title" onclick="toggleHistoryCard(this)">
-      <span>✅ Historique des validations</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="collapsible-body" id="history-body">
-      <p class="card-desc">Retrouvez les dernières analyses de trading validées.</p>
-      <div id="validation-history-list">
-        <!-- Rempli dynamiquement en JS -->
+    <div class="grid-right">
+      <!-- HISTORIQUE DES VALIDATIONS -->
+      <div id="validation-history-card" class="card">
+        <div class="card-title" onclick="toggleHistoryCard(this)">
+          <span>✅ Historique des validations</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="collapsible-body" id="history-body">
+          <p class="card-desc">Retrouvez les dernières analyses de trading validées.</p>
+          <div id="validation-history-list">
+            <!-- Rempli dynamiquement en JS -->
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </div> <!-- end .grid-right -->
+  </div> <!-- end .desktop-grid -->
 
 </div>
 </div>
@@ -626,74 +899,88 @@
 <!-- ===================== PAGE CALCULATEUR ===================== -->
 <div id="page-calculateur" class="page">
 <div class="container">
+  <div class="desktop-grid">
+    <div class="grid-left">
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title" style="cursor:default; margin-bottom:14px;">
+          📊 Calculateur de position
+        </div>
+        <p class="card-desc">Entre tes paramètres pour calculer la taille de lot optimale selon ton risque.</p>
 
-  <div class="card">
-    <div class="card-title" style="cursor:default; margin-bottom:14px;">
-      📊 Calculateur de position
-    </div>
-    <p class="card-desc">Entre tes paramètres pour calculer la taille de lot optimale selon ton risque.</p>
+        <div class="calc-grid">
+          <div>
+            <div class="field-label">Capital</div>
+            <div class="field-unit">
+              <input type="number" id="calc-capital" placeholder="10000" min="0">
+              <span class="unit-label">$</span>
+            </div>
+          </div>
+          <div>
+            <div class="field-label">Risque</div>
+            <div class="field-unit">
+              <input type="number" id="calc-risk" placeholder="1" min="0.1" max="100" step="0.1">
+              <span class="unit-label">%</span>
+            </div>
+          </div>
+          <div>
+            <div class="field-label">Stop Loss</div>
+            <div class="field-unit">
+              <input type="number" id="calc-sl" placeholder="20" min="0">
+              <span class="unit-label">pips</span>
+            </div>
+          </div>
+          <div>
+            <div class="field-label">Actif</div>
+            <select id="calc-asset" class="select-field">
+              <option value="forex">Forex</option>
+              <option value="indices">Indices</option>
+              <option value="crypto">Crypto</option>
+              <option value="or">Or (XAU)</option>
+            </select>
+          </div>
+        </div>
 
-    <div class="calc-grid">
-      <div>
-        <div class="field-label">Capital</div>
-        <div class="field-unit">
-          <input type="number" id="calc-capital" placeholder="10000" min="0">
-          <span class="unit-label">$</span>
+        <button class="btn-calc" onclick="calculatePosition()">Calculer ma taille de lot</button>
+      </div>
+    </div> <!-- end .grid-left -->
+
+    <div class="grid-right">
+      <!-- PLACEHOLDER when not calculated yet -->
+      <div id="calc-placeholder" class="card" style="margin-bottom:0;">
+        <div class="empty-state">
+          <div class="es-icon">📊</div>
+          <p>Entrez vos paramètres et cliquez sur "Calculer" pour afficher la taille de lot recommandée.</p>
         </div>
       </div>
-      <div>
-        <div class="field-label">Risque</div>
-        <div class="field-unit">
-          <input type="number" id="calc-risk" placeholder="1" min="0.1" max="100" step="0.1">
-          <span class="unit-label">%</span>
+      
+      <!-- RESULTS -->
+      <div id="calc-result" class="hidden">
+        <div class="result-box">
+          <div class="r-label">Taille de lot recommandée</div>
+          <div class="r-value" id="lot-value">0.10</div>
+          <div class="r-sub" id="lot-sub">Lot standard</div>
+        </div>
+        <div class="result-details">
+          <div class="detail-item">
+            <div class="d-val" id="res-risk-amount">–</div>
+            <div class="d-lbl">Montant risqué</div>
+          </div>
+          <div class="detail-item">
+            <div class="d-val" id="res-risk-pct">–</div>
+            <div class="d-lbl">% du capital</div>
+          </div>
+          <div class="detail-item">
+            <div class="d-val" id="res-sl-pips">–</div>
+            <div class="d-lbl">Stop Loss</div>
+          </div>
+          <div class="detail-item">
+            <div class="d-val" id="res-asset">–</div>
+            <div class="d-lbl">Actif</div>
+          </div>
         </div>
       </div>
-      <div>
-        <div class="field-label">Stop Loss</div>
-        <div class="field-unit">
-          <input type="number" id="calc-sl" placeholder="20" min="0">
-          <span class="unit-label">pips</span>
-        </div>
-      </div>
-      <div>
-        <div class="field-label">Actif</div>
-        <select id="calc-asset" class="select-field">
-          <option value="forex">Forex</option>
-          <option value="indices">Indices</option>
-          <option value="crypto">Crypto</option>
-          <option value="or">Or (XAU)</option>
-        </select>
-      </div>
-    </div>
-
-    <button class="btn-calc" onclick="calculatePosition()">Calculer ma taille de lot</button>
-  </div>
-
-  <div id="calc-result" class="hidden">
-    <div class="result-box">
-      <div class="r-label">Taille de lot recommandée</div>
-      <div class="r-value" id="lot-value">0.10</div>
-      <div class="r-sub" id="lot-sub">Lot standard</div>
-    </div>
-    <div class="result-details">
-      <div class="detail-item">
-        <div class="d-val" id="res-risk-amount">–</div>
-        <div class="d-lbl">Montant risqué</div>
-      </div>
-      <div class="detail-item">
-        <div class="d-val" id="res-risk-pct">–</div>
-        <div class="d-lbl">% du capital</div>
-      </div>
-      <div class="detail-item">
-        <div class="d-val" id="res-sl-pips">–</div>
-        <div class="d-lbl">Stop Loss</div>
-      </div>
-      <div class="detail-item">
-        <div class="d-val" id="res-asset">–</div>
-        <div class="d-lbl">Actif</div>
-      </div>
-    </div>
-  </div>
+    </div> <!-- end .grid-right -->
+  </div> <!-- end .desktop-grid -->
 
 </div>
 </div>
@@ -701,49 +988,54 @@
 <!-- ===================== PAGE JOURNAL ===================== -->
 <div id="page-journal" class="page">
 <div class="container">
+  <div class="desktop-grid">
+    <div class="grid-left">
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title" style="cursor:default; margin-bottom:14px;">📝 Nouveau trade</div>
 
-  <div class="card">
-    <div class="card-title" style="cursor:default; margin-bottom:14px;">📝 Nouveau trade</div>
-
-    <div class="calc-grid">
-      <div>
-        <div class="field-label">Actif</div>
-        <input type="text" id="j-asset" class="field-input" placeholder="EUR/USD, BTC...">
-      </div>
-      <div>
-        <div class="field-label">Résultat (R)</div>
-        <div class="field-unit">
-          <input type="number" id="j-rr" placeholder="1.5" step="0.1">
-          <span class="unit-label">R</span>
+        <div class="calc-grid">
+          <div>
+            <div class="field-label">Actif</div>
+            <input type="text" id="j-asset" class="field-input" placeholder="EUR/USD, BTC...">
+          </div>
+          <div>
+            <div class="field-label">Résultat (R)</div>
+            <div class="field-unit">
+              <input type="number" id="j-rr" placeholder="1.5" step="0.1">
+              <span class="unit-label">R</span>
+            </div>
+          </div>
         </div>
+
+        <div style="margin-bottom:12px;">
+          <div class="field-label" style="margin-bottom:8px;">Direction</div>
+          <div class="direction-row">
+            <div class="dir-btn" id="dir-long" onclick="setDirection('long')">▲ LONG</div>
+            <div class="dir-btn" id="dir-short" onclick="setDirection('short')">▼ SHORT</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div class="field-label" style="margin-bottom:8px;">Résultat</div>
+          <div class="result-row">
+            <div class="res-btn" id="res-win" onclick="setResult('win')">✅ Win</div>
+            <div class="res-btn" id="res-loss" onclick="setResult('loss')">❌ Loss</div>
+            <div class="res-btn" id="res-be" onclick="setResult('be')">➖ B/E</div>
+          </div>
+        </div>
+
+        <button class="btn-save-trade" onclick="saveTrade()">Enregistrer le trade</button>
       </div>
-    </div>
+    </div> <!-- end .grid-left -->
 
-    <div style="margin-bottom:12px;">
-      <div class="field-label" style="margin-bottom:8px;">Direction</div>
-      <div class="direction-row">
-        <div class="dir-btn" id="dir-long" onclick="setDirection('long')">▲ LONG</div>
-        <div class="dir-btn" id="dir-short" onclick="setDirection('short')">▼ SHORT</div>
+    <div class="grid-right">
+      <!-- LISTE DES TRADES -->
+      <div id="trades-section">
+        <div class="section-label">Historique</div>
+        <div id="trades-list"></div>
       </div>
-    </div>
-
-    <div style="margin-bottom:16px;">
-      <div class="field-label" style="margin-bottom:8px;">Résultat</div>
-      <div class="result-row">
-        <div class="res-btn" id="res-win" onclick="setResult('win')">✅ Win</div>
-        <div class="res-btn" id="res-loss" onclick="setResult('loss')">❌ Loss</div>
-        <div class="res-btn" id="res-be" onclick="setResult('be')">➖ B/E</div>
-      </div>
-    </div>
-
-    <button class="btn-save-trade" onclick="saveTrade()">Enregistrer le trade</button>
-  </div>
-
-  <!-- LISTE DES TRADES -->
-  <div id="trades-section">
-    <div class="section-label">Historique</div>
-    <div id="trades-list"></div>
-  </div>
+    </div> <!-- end .grid-right -->
+  </div> <!-- end .desktop-grid -->
 
 </div>
 </div>
@@ -780,36 +1072,113 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title" style="cursor:default; font-size:15px; margin-bottom:12px;">Répartition W/L/BE</div>
-      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-        <span style="font-size:13px; color:var(--green); font-weight:600;" id="s-wins">0 Wins</span>
-        <span style="font-size:13px; color:var(--blue); font-weight:600;" id="s-be">0 B/E</span>
-        <span style="font-size:13px; color:var(--red); font-weight:600;" id="s-losses">0 Losses</span>
+    <div class="desktop-grid" style="grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title" style="cursor:default; font-size:15px; margin-bottom:12px;">Répartition W/L/BE</div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <span style="font-size:13px; color:var(--green); font-weight:600;" id="s-wins">0 Wins</span>
+          <span style="font-size:13px; color:var(--blue); font-weight:600;" id="s-be">0 B/E</span>
+          <span style="font-size:13px; color:var(--red); font-weight:600;" id="s-losses">0 Losses</span>
+        </div>
+        <div class="prog-wrap">
+          <div class="prog-bar" id="s-prog" style="width:0%"></div>
+        </div>
+        <div class="prog-labels">
+          <span>0%</span>
+          <span id="s-prog-lbl">Win rate</span>
+          <span>100%</span>
+        </div>
       </div>
-      <div class="prog-wrap">
-        <div class="prog-bar" id="s-prog" style="width:0%"></div>
-      </div>
-      <div class="prog-labels">
-        <span>0%</span>
-        <span id="s-prog-lbl">Win rate</span>
-        <span>100%</span>
+
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title" style="cursor:default; font-size:15px; margin-bottom:12px;">Série en cours</div>
+        <div style="text-align:center; padding:8px 0;">
+          <div id="s-streak-val" style="font-family:'Syne',sans-serif; font-size:32px; font-weight:800;"></div>
+          <div id="s-streak-lbl" style="font-size:13px; color:var(--muted); margin-top:4px;"></div>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title" style="cursor:default; font-size:15px; margin-bottom:12px;">Série en cours</div>
-      <div style="text-align:center; padding:8px 0;">
-        <div id="s-streak-val" style="font-family:'Syne',sans-serif; font-size:32px; font-weight:800;"></div>
-        <div id="s-streak-lbl" style="font-size:13px; color:var(--muted); margin-top:4px;"></div>
-      </div>
-    </div>
-
-    <button onclick="clearTrades()" style="width:100%; background:var(--card2); color:var(--red); border:1px solid var(--border); border-radius:12px; padding:13px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:14px;">
+    <button onclick="clearTrades()" style="width:100%; background:var(--card2); color:var(--red); border:1px solid var(--border); border-radius:12px; padding:13px; font-size:14px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top: 16px; margin-bottom:14px;">
       🗑 Réinitialiser le journal
     </button>
   </div>
 
+</div>
+</div>
+
+<!-- ===================== PAGE CALENDRIER ===================== -->
+<div id="page-calendrier" class="page">
+<div class="container">
+  <div class="desktop-grid">
+    
+    <!-- Left Column: Calendar Card -->
+    <div class="grid-left">
+      <div class="card" style="margin-bottom:0;">
+        <div class="calendar-header">
+          <div class="calendar-title-wrapper">
+            <div class="field-label" style="margin-bottom:2px;">Suivi de mes Trades</div>
+            <div class="calendar-month-year" id="calendar-month-year">Juin 2026</div>
+          </div>
+          <div class="calendar-nav">
+            <button class="calendar-nav-btn" onclick="changeMonth(-1)" aria-label="Mois précédent">←</button>
+            <button class="calendar-nav-btn" onclick="changeMonth(1)" aria-label="Mois suivant">→</button>
+          </div>
+        </div>
+        
+        <div class="calendar-weekdays-grid">
+          <div class="weekday-lbl">Dim</div>
+          <div class="weekday-lbl">Lun</div>
+          <div class="weekday-lbl">Mar</div>
+          <div class="weekday-lbl">Mer</div>
+          <div class="weekday-lbl">Jeu</div>
+          <div class="weekday-lbl">Ven</div>
+          <div class="weekday-lbl">Sam</div>
+        </div>
+        
+        <div class="calendar-days-grid" id="calendar-days-grid">
+          <!-- Rendered dynamically by Javascript -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Daily Summary -->
+    <div class="grid-right">
+      <div class="card" style="margin-bottom:0;">
+        <div class="events-card-header">
+          <div class="card-title" style="cursor:default; margin-bottom:4px;">
+            <span>📅 Performance du Jour</span>
+          </div>
+          <p class="card-desc" id="selected-date-title">Sélectionnez un jour</p>
+        </div>
+        
+        <!-- Daily metrics summary -->
+        <div class="daily-stats-grid">
+          <div class="daily-stat-card">
+            <div class="daily-stat-val" id="d-total-trades">0</div>
+            <div class="daily-stat-lbl">Trades</div>
+          </div>
+          <div class="daily-stat-card">
+            <div class="daily-stat-val" id="d-winrate">0%</div>
+            <div class="daily-stat-lbl">Win Rate</div>
+          </div>
+          <div class="daily-stat-card">
+            <div class="daily-stat-val" id="d-profit">0.00R</div>
+            <div class="daily-stat-lbl">Bilan Net</div>
+          </div>
+        </div>
+        
+        <div class="events-list" id="calendar-trades-list">
+          <div class="empty-state">
+            <div class="es-icon">📝</div>
+            <p>Aucun trade enregistré pour ce jour.</p>
+            <button class="btn-calc" onclick="switchTab('journal')" style="margin-top:16px; font-size: 13px; padding: 10px;">Enregistrer un trade</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
 </div>
 </div>
 
@@ -835,10 +1204,14 @@ function switchTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + tab).classList.add('active');
-  const tabs = ['validateur','calculateur','journal','stats'];
-  document.querySelectorAll('.nav-tab')[tabs.indexOf(tab)].classList.add('active');
+  const tabs = ['validateur','calculateur','journal','stats','calendrier'];
+  const index = tabs.indexOf(tab);
+  if (index !== -1) {
+    document.querySelectorAll('.nav-tab')[index].classList.add('active');
+  }
   if (tab === 'stats') renderStats();
   if (tab === 'journal') renderTrades();
+  if (tab === 'calendrier') renderCalendar();
 }
 
 // ======================== THEME SWITCHER ========================
@@ -1224,6 +1597,8 @@ function calculatePosition() {
   document.getElementById('res-risk-pct').textContent = risk + '%';
   document.getElementById('res-sl-pips').textContent = sl + ' pips';
   document.getElementById('res-asset').textContent = assetNames[asset];
+  const placeholder = document.getElementById('calc-placeholder');
+  if (placeholder) placeholder.classList.add('hidden');
   document.getElementById('calc-result').classList.remove('hidden');
   document.getElementById('calc-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -1257,8 +1632,12 @@ function saveTrade() {
   tradeCtr++;
   const now = new Date();
   const dateStr = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'short' }) + ' ' + now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const dateKey = `${yyyy}-${mm}-${dd}`;
 
-  trades.unshift({ id: tradeCtr, asset, direction: tradeDirection, result: tradeResult, rr, date: dateStr });
+  trades.unshift({ id: tradeCtr, asset, direction: tradeDirection, result: tradeResult, rr, date: dateStr, dateKey });
   localStorage.setItem(KEYS.trades, JSON.stringify(trades));
   localStorage.setItem(KEYS.tradeCtr, String(tradeCtr));
 
@@ -1277,6 +1656,7 @@ function deleteTrade(id) {
   localStorage.setItem(KEYS.trades, JSON.stringify(trades));
   renderTrades();
   renderStats();
+  renderCalendar();
 }
 
 function renderTrades() {
@@ -1358,6 +1738,214 @@ function clearTrades() {
   localStorage.setItem(KEYS.trades, '[]');
   renderTrades();
   renderStats();
+}
+
+// ======================== CALENDRIER DE TRADING ========================
+const monthNames = [
+  "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+  "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+];
+
+let calCurrentDate = new Date(2026, 5, 11); // Start at June 11, 2026
+let calSelectedDate = new Date(2026, 5, 11); // Start with June 11, 2026 selected
+
+function getTradeDateKey(trade) {
+  if (trade.dateKey) return trade.dateKey;
+  
+  // Fallback parsing of "11 juin 16:14" style
+  try {
+    const parts = trade.date.split(' ');
+    const day = parseInt(parts[0]);
+    const monthStr = parts[1].toLowerCase();
+    
+    const months = {
+      'janv.': 0, 'févr.': 1, 'mars': 2, 'avr.': 3, 'mai': 4, 'juin': 5,
+      'juil.': 6, 'août': 7, 'sept.': 8, 'oct.': 9, 'nov.': 10, 'déc.': 11,
+      'janvier': 0, 'février': 1, 'avril': 3, 'juillet': 6, 'novembre': 10, 'décembre': 11
+    };
+    
+    let month = 5; // Default June
+    for (const [key, val] of Object.entries(months)) {
+      if (monthStr.startsWith(key)) {
+        month = val;
+        break;
+      }
+    }
+    const mm = String(month + 1).padStart(2, '0');
+    const dd = String(day).padStart(2, '0');
+    return `2026-${mm}-${dd}`;
+  } catch (e) {
+    return "2026-06-11";
+  }
+}
+
+function getTradeProfitR(trade) {
+  const rr = parseFloat(trade.rr) || 1; // default to 1R if empty/0
+  if (trade.result === 'win') return rr;
+  if (trade.result === 'loss') return -1;
+  return 0; // BE is 0
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calendar-days-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  
+  const year = calCurrentDate.getFullYear();
+  const month = calCurrentDate.getMonth();
+  
+  // Set month/year label
+  const monthLabel = document.getElementById('calendar-month-year');
+  if (monthLabel) {
+    monthLabel.textContent = monthNames[month] + " " + year;
+  }
+  
+  // Get first day of month index (0 = Sun, 1 = Mon...)
+  const firstDayIndex = new Date(year, month, 1).getDay();
+  // Get total days in month
+  const totalDays = new Date(year, month + 1, 0).getDate();
+  
+  // Empty cells for alignment
+  for (let i = 0; i < firstDayIndex; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell empty';
+    grid.appendChild(cell);
+  }
+  
+  // Month days
+  for (let day = 1; day <= totalDays; day++) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    
+    const cellDate = new Date(year, month, day);
+    const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    
+    // Find trades for this day
+    const dayTrades = trades.filter(t => getTradeDateKey(t) === dateKey);
+    
+    // Day number element
+    const numEl = document.createElement('span');
+    numEl.className = 'day-number';
+    numEl.textContent = day;
+    cell.appendChild(numEl);
+    
+    // Check if cell is today (June 11, 2026)
+    if (year === 2026 && month === 5 && day === 11) {
+      cell.classList.add('today');
+    }
+    
+    // Check if selected
+    if (calSelectedDate &&
+        calSelectedDate.getDate() === day &&
+        calSelectedDate.getMonth() === month &&
+        calSelectedDate.getFullYear() === year) {
+      cell.classList.add('selected');
+    }
+    
+    // If there are trades on this day, calculate net profit and display performance label
+    if (dayTrades.length > 0) {
+      const netProfit = dayTrades.reduce((sum, t) => sum + getTradeProfitR(t), 0);
+      
+      const pnlEl = document.createElement('span');
+      pnlEl.className = 'day-pnl';
+      
+      // Formatting netProfit as +1.5R, -1.0R, or 0R
+      if (netProfit > 0) {
+        pnlEl.textContent = `+${netProfit.toFixed(1)}R`;
+        pnlEl.classList.add('win');
+        cell.classList.add('perf-win');
+      } else if (netProfit < 0) {
+        pnlEl.textContent = `${netProfit.toFixed(1)}R`;
+        pnlEl.classList.add('loss');
+        cell.classList.add('perf-loss');
+      } else {
+        pnlEl.textContent = `0R`;
+        pnlEl.classList.add('be');
+        cell.classList.add('perf-be');
+      }
+      
+      cell.appendChild(pnlEl);
+    }
+    
+    cell.addEventListener('click', () => {
+      calSelectedDate = new Date(year, month, day);
+      renderCalendar();
+    });
+    
+    grid.appendChild(cell);
+  }
+  
+  // Render the events (trades) for the selected date
+  renderEventsForDate(calSelectedDate);
+}
+
+function changeMonth(offset) {
+  calCurrentDate.setMonth(calCurrentDate.getMonth() + offset);
+  renderCalendar();
+}
+
+function renderEventsForDate(date) {
+  const container = document.getElementById('calendar-trades-list');
+  const dateTitle = document.getElementById('selected-date-title');
+  if (!container || !dateTitle) return;
+  
+  if (!date) {
+    dateTitle.textContent = "Sélectionnez un jour";
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="es-icon">📝</div>
+        <p>Aucun trade enregistré pour ce jour.</p>
+        <button class="btn-calc" onclick="switchTab('journal')" style="margin-top:16px; font-size:13px; padding:10px;">Enregistrer un trade</button>
+      </div>
+    `;
+    return;
+  }
+  
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  const formattedDate = date.toLocaleDateString('fr-FR', options);
+  dateTitle.textContent = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+  
+  const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  const dayTrades = trades.filter(t => getTradeDateKey(t) === dateKey);
+  
+  // Calculate daily stats
+  const total = dayTrades.length;
+  const wins = dayTrades.filter(t => t.result === 'win').length;
+  const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
+  const netProfit = dayTrades.reduce((sum, t) => sum + getTradeProfitR(t), 0);
+  
+  // Update daily stats summary HTML elements
+  document.getElementById('d-total-trades').textContent = total;
+  document.getElementById('d-winrate').textContent = winRate + '%';
+  
+  const profitValEl = document.getElementById('d-profit');
+  profitValEl.textContent = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'R';
+  profitValEl.className = 'daily-stat-val ' + (netProfit > 0 ? 'green' : netProfit < 0 ? 'red' : 'blue');
+  
+  if (dayTrades.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="es-icon">📝</div>
+        <p>Aucun trade enregistré pour ce jour.</p>
+        <button class="btn-calc" onclick="switchTab('journal')" style="margin-top:16px; font-size: 13px; padding: 10px;">Enregistrer un trade</button>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = dayTrades.map(t => `
+    <div class="trade-item" style="animation: slideIn 0.3s ease;">
+      <div class="trade-dir ${t.direction}">${t.direction === 'long' ? '▲' : '▼'}</div>
+      <div class="trade-info">
+        <div class="trade-asset">${t.asset} ${t.rr ? '· ' + t.rr + 'R' : ''}</div>
+        <div class="trade-meta">${t.direction.toUpperCase()} · ${t.date}</div>
+      </div>
+      <div class="trade-result ${t.result}">${t.result === 'win' ? '✅ Win' : t.result === 'loss' ? '❌ Loss' : '➖ B/E'}</div>
+      <button class="trade-del" onclick="deleteTrade(${t.id})">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>
+  `).join('');
 }
 
 // ======================== INIT ========================
